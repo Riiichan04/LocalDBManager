@@ -1,7 +1,7 @@
 import { fetchDatabase, fetchTableFromDatabase, fetchTableRows } from "@/services/databaseService"
 import { DatabaseConnection } from "@/types/Connection"
 import { CircularProgress } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
@@ -14,6 +14,8 @@ export default function TableComponent() {
     const [listTable, setListTable] = useState<Record<string, string[]>>({})  //List loaded table
     const [rows, setRows] = useState<Record<string, unknown>[]>([])
     const [columns, setColumns] = useState<string[]>([])
+
+    const tableRef = useRef<HTMLTableElement>(null)
 
     const tempConnection = {
         host: '',
@@ -69,6 +71,27 @@ export default function TableComponent() {
         fetchDatabaseData()
     }, [])
 
+    const handleMouseDown = (e: React.MouseEvent, colIndex: number) => {
+        const startX = e.clientX
+        const startWidth = tableRef.current!.rows[0].cells[colIndex].offsetWidth
+
+        const onMouseMove = (e: MouseEvent) => {
+            const newWidth = startWidth + (e.clientX - startX)
+            tableRef.current!.querySelectorAll('tr').forEach(row => {
+                const cell = row.cells[colIndex]
+                if (cell) cell.style.width = `${newWidth}px`
+            })
+        }
+
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove)
+            document.removeEventListener('mouseup', onMouseUp)
+        }
+
+        document.addEventListener('mousemove', onMouseMove)
+        document.addEventListener('mouseup', onMouseUp)
+    }
+
     return (
         <>
             {!loading ?
@@ -98,7 +121,34 @@ export default function TableComponent() {
                     </div>
 
                     <div className="col-span-10" style={{ overflow: 'auto' }}>
-                        <table className="min-w-max border-collapse border border-gray-300">
+                        <table ref={tableRef} className="min-w-max border-collapse border border-gray-300 table-fixed w-full">
+                            <thead>
+                                <tr>
+                                    {columns.map((col, i) => (
+                                        <th key={col} className="relative border p-2 text-left bg-gray-100 group">
+                                            <div className="truncate">{col}</div>
+                                            <div
+                                                onMouseDown={(e) => handleMouseDown(e, i)}
+                                                className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-transparent group-hover:bg-blue-400"
+                                            />
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {rows.map((row, i) => (
+                                    <tr key={i}>
+                                        {columns.map((col) => (
+                                            <td key={col} className="border p-2 truncate">{String(row[col])}</td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* <div className="col-span-10" style={{ overflow: 'auto' }}>
+                        <table ref={tableRef} className="min-w-max border-collapse border border-gray-300">
                             <thead>
                                 <tr>
                                     {columns.map(col => (
@@ -116,7 +166,7 @@ export default function TableComponent() {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
                 </div>
             }
         </>
