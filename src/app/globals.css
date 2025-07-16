@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@layer base {
+    .dark-theme {
+        --background-color: #162228;
+        --text-color: #faf9f6;
+        --text-color-hover: #cfcece;
+
+        --main-cta-color: #019ce0;
+        --main-cta-color-hover: #00b9f2;
+        --main-cta-text-color: #faf9f6;
+
+        --sub-cta-color: #ffa500;
+        --sub-cta-color-hover: #ffc067;
+        --sub-cta-text-color: #0b1215;
+
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .light-theme {
+        --background-color: #f5f5f5;
+        --text-color: #0e171b;
+        --text-color-hover: #4d4d4d;
+
+        --main-cta-color: #019ce0;
+        --main-cta-color-hover: #00b9f2;
+        --main-cta-text-color: #faf9f6;
+
+        --sub-cta-color: #ffa500;
+        --sub-cta-color-hover: #ffc067;
+        --sub-cta-text-color: #0b1215;
+
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .editor-onedark-theme {
+        background-color: #282c35;
+    }
+
+    .editor-light-theme {
+        background-color: #f5f5f5;
+    }
+}
+
+.icon-button {
+    font-size: 24px;
+}
+
+.text-icon {
+    font-size: 20px;
+}
+
+.text-button {
+    color: var(--text-color);
+}
+
+.text-button:hover {
+    color: var(--text-color-hover);
+}
+
+.main-cta-button {
+    border: 0;
+    background-color: var(--main-cta-color);
+    color: var(--main-cta-text-color);
+}
+
+.main-cta-button:hover {
+    background-color: var(--main-cta-color-hover);
+}
+
+.sub-cta-button {
+    border: 0;
+    background-color: var(--sub-cta-color);
+    color: var(--sub-cta-text-color);
+}
+
+.sub-cta-button:hover {
+    background-color: var(--sub-cta-color-hover);
+}
+
+
+.active-feature {
+    background-color: var(--sub-cta-color);
+}
+
+.active-feature:hover {
+    background-color: var(--sub-cta-color-hover);
+}
+
+/* :root {
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+
+.light-theme {
+
+}
+
+.dark-theme {
+
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+} */

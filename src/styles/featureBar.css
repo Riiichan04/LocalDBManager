@@ -1,0 +1,8 @@
+.feature-bar>* {
+    user-select: none;
+    cursor: pointer;
+}
+
+.feature-bar>*:hover {
+    color: var(--text-color-hover);
+}
