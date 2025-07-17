@@ -1,5 +1,5 @@
-import { fetchDatabase, fetchTableFromDatabase, fetchTableRows } from "@/services/databaseService"
-import { DatabaseConnection } from "@/types/Connection"
+import { fetchDatabase, fetchTableDataType, fetchTableFromDatabase, fetchTableRows } from "@/services/databaseService"
+import { DatabaseConnection, FieldDetail } from "@/types/Connection"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
@@ -7,13 +7,14 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import BorderAllRoundedIcon from '@mui/icons-material/BorderAllRounded';
 
+
 export default function TableComponent() {
     const [listDatabase, updateListDatabase] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
     const [expanded, setExpanded] = useState<Set<string>>(new Set())    //Expand DB to see table
     const [listTable, setListTable] = useState<Record<string, string[]>>({})  //List loaded table
     const [rows, setRows] = useState<Record<string, unknown>[]>([])
-    const [columns, setColumns] = useState<string[]>([])
+    const [columns, setColumns] = useState<FieldDetail[]>([])
 
     const tableRef = useRef<HTMLTableElement>(null)
 
@@ -49,7 +50,15 @@ export default function TableComponent() {
         const data = await fetchTableRows({ connection: tempConnection, databaseName: dbName, tableName: tableName })
         setRows(data)
         if (data.length > 0) {
-            setColumns(Object.keys(data[0]))
+            const tableDataType: FieldDetail[] = await fetchTableDataType({ connection: tempConnection, databaseName: dbName, tableName: tableName })
+            console.log(tableDataType)
+            const listName = Object.keys(data[0])
+            const listColumn: FieldDetail[] = []
+            listName.forEach(name => {
+                const dataType = tableDataType.find(obj => obj.fieldName === name)?.fieldType
+                listColumn.push({ fieldName: name, fieldType: dataType || "" })
+            })
+            setColumns(listColumn)
         }
     }
 
@@ -95,7 +104,9 @@ export default function TableComponent() {
     return (
         <>
             {!loading ?
-                <CircularProgress /> :
+                <div className="flex align-center" style={{ height: '100%' }}>
+                    <CircularProgress />
+                </div> :
                 <div className="grid grid-cols-12 border-t flex" style={{ height: '100%' }}>
                     <div className="col-span-2 border-e" style={{ overflow: 'auto' }}>
                         {listDatabase.map((db) => (
@@ -125,8 +136,11 @@ export default function TableComponent() {
                             <thead>
                                 <tr>
                                     {columns.map((col, i) => (
-                                        <th key={col} className="relative border p-2 text-left bg-gray-100 group">
-                                            <div className="truncate">{col}</div>
+                                        <th key={col.fieldName} className="relative border p-2 text-left bg-gray-100 group">
+                                            <div className="truncate">
+                                                <p className="font-semibold" >{col.fieldName}</p>
+                                                <p>#{col.fieldType}</p>
+                                            </div>
                                             <div
                                                 onMouseDown={(e) => handleMouseDown(e, i)}
                                                 className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-transparent group-hover:bg-blue-400"
@@ -135,11 +149,11 @@ export default function TableComponent() {
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style={{fontSize: '14px'}}>
                                 {rows.map((row, i) => (
                                     <tr key={i}>
                                         {columns.map((col) => (
-                                            <td key={col} className="border p-2 truncate">{String(row[col])}</td>
+                                            <td key={col.fieldName} className="border p-2 truncate">{String(row[col.fieldName])}</td>
                                         ))}
                                     </tr>
                                 ))}

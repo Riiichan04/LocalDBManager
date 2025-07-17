@@ -10,7 +10,6 @@ import { useState } from "react";
 
 export default function Home() {
     const [currentFeature, setCurrentFeature] = useState(FeatureType.HOME)
-
     const [currentEditorTheme, setCurrentEditorTheme] = useState(
         useClientValue(() => localStorage.getItem('editor-theme') || "default", "default") === "default" ? EditorTheme.DEFAULT : EditorTheme.ONEDARK
     )

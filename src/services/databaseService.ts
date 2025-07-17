@@ -1,4 +1,5 @@
-import { DatabaseConnection, DatabaseTableDetail, TableDetail } from "@/types/Connection";
+import { ShowColumnResult } from "@/app/api/table-types/route";
+import { DatabaseConnection, DatabaseTableDetail, FieldDetail, TableDetail } from "@/types/Connection";
 import axios from "axios";
 
 export async function fetchDatabase(config: DatabaseConnection): Promise<string[]> {
@@ -21,5 +22,10 @@ export async function fetchTableFromDatabase(config: DatabaseTableDetail): Promi
 
 export async function fetchTableRows(config: TableDetail): Promise<Record<string, unknown>[]> {
     const res = await axios.post('/api/fields', config)
+    return res.data
+}
+
+export async function fetchTableDataType(config: TableDetail): Promise<FieldDetail[]> {
+    const res = await axios.post('/api/table-types', config)
     return res.data
 }

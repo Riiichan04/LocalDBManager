@@ -16,3 +16,8 @@ export type TableDetail = {
     databaseName: string,
     tableName: string
 }
+
+export type FieldDetail = {
+    fieldName: string,
+    fieldType: string
+}
