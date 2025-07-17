@@ -1,12 +1,13 @@
 import { fetchDatabase, fetchTableDataType, fetchTableFromDatabase, fetchTableRows } from "@/services/databaseService"
 import { DatabaseConnection, FieldDetail } from "@/types/Connection"
+import { DataTypeIcon } from "@/types/IconType"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import BorderAllRoundedIcon from '@mui/icons-material/BorderAllRounded';
-
+import '@/styles/table.css'
 
 export default function TableComponent() {
     const [listDatabase, updateListDatabase] = useState<string[]>([])
@@ -15,6 +16,7 @@ export default function TableComponent() {
     const [listTable, setListTable] = useState<Record<string, string[]>>({})  //List loaded table
     const [rows, setRows] = useState<Record<string, unknown>[]>([])
     const [columns, setColumns] = useState<FieldDetail[]>([])
+    const [activeLine, setActiveLine] = useState<string>('')
 
     const tableRef = useRef<HTMLTableElement>(null)
 
@@ -44,6 +46,7 @@ export default function TableComponent() {
         }
 
         setExpanded(newExpanded)
+        setActiveLine(dbName)
     }
 
     const loadTableData = async (dbName: string, tableName: string) => {
@@ -60,6 +63,7 @@ export default function TableComponent() {
             })
             setColumns(listColumn)
         }
+        setActiveLine(tableName)
     }
 
     useEffect(() => {
@@ -102,17 +106,19 @@ export default function TableComponent() {
     }
 
     return (
-        <>
+        <div className="grid grid-cols-12 border-t flex" style={{ height: '100%' }}>
             {!loading ?
-                <div className="flex align-center" style={{ height: '100%' }}>
-                    <CircularProgress />
+                <div style={{ height: '100%' }}>
+                    <div className="col-span-2 flex items-center justify-center" >
+                        <CircularProgress />
+                    </div>
                 </div> :
-                <div className="grid grid-cols-12 border-t flex" style={{ height: '100%' }}>
+                <>
                     <div className="col-span-2 border-e" style={{ overflow: 'auto' }}>
                         {listDatabase.map((db) => (
                             <div key={db}>
                                 <div
-                                    className="p-2 flex cursor-pointer select-none text-button"
+                                    className={`p-2 flex cursor-pointer select-none text-button ${activeLine === db ? 'active-table-bar' : ''}`}
                                     onClick={() => loadTableFromDatabase(db)}
                                 >
                                     {expanded.has(db) ? <ExpandMoreRoundedIcon /> : <ChevronRightRoundedIcon />}
@@ -120,7 +126,7 @@ export default function TableComponent() {
                                     <span className="ms-2" title={db}>{db}</span>
                                 </div>
                                 {expanded.has(db) && (listTable[db] || []).map(table =>
-                                    <div key={table} className="truncate ms-5 cursor-pointer select-none text-button"
+                                    <div key={table} className={`truncate ps-5 cursor-pointer select-none text-button ${activeLine === table ? 'active-table-bar' : ''}`}
                                         onClick={() => loadTableData(db, table)}
                                     >
                                         <BorderAllRoundedIcon sx={{ fontSize: '14px' }} />
@@ -139,7 +145,7 @@ export default function TableComponent() {
                                         <th key={col.fieldName} className="relative border p-2 text-left bg-gray-100 group">
                                             <div className="truncate">
                                                 <p className="font-semibold" >{col.fieldName}</p>
-                                                <p>#{col.fieldType}</p>
+                                                <div className="truncate"> {getColumnDataType(col.fieldType)} <span>{col.fieldType}</span> </div>
                                             </div>
                                             <div
                                                 onMouseDown={(e) => handleMouseDown(e, i)}
@@ -149,7 +155,7 @@ export default function TableComponent() {
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody style={{fontSize: '14px'}}>
+                            <tbody style={{ fontSize: '14px' }}>
                                 {rows.map((row, i) => (
                                     <tr key={i}>
                                         {columns.map((col) => (
@@ -160,30 +166,13 @@ export default function TableComponent() {
                             </tbody>
                         </table>
                     </div>
-
-                    {/* <div className="col-span-10" style={{ overflow: 'auto' }}>
-                        <table ref={tableRef} className="min-w-max border-collapse border border-gray-300">
-                            <thead>
-                                <tr>
-                                    {columns.map(col => (
-                                        <th key={col} className="border p-2 text-left bg-gray-100">{col}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rows.map((row, i) => (
-                                    <tr key={i}>
-                                        {columns.map(col => (
-                                            <td key={col} className="border p-2 truncate max-w-[200px]">{String(row[col])}</td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div> */}
-                </div>
+                </>
             }
-        </>
+        </div>
     )
 }
 
+function getColumnDataType(type: string) {
+    const typeName = type.substring(0, type.indexOf('(') === -1 ? type.length : type.indexOf('(')).toLowerCase()
+    return DataTypeIcon[typeName]
+}

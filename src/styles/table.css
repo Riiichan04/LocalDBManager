@@ -1,0 +1,7 @@
+.active-table-bar {
+    background-color: var(--main-cta-color);
+}
+
+.active-row {
+    background-color: var(--main-cta-color-hover);
+}

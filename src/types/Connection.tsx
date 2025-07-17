@@ -21,3 +21,9 @@ export type FieldDetail = {
     fieldName: string,
     fieldType: string
 }
+
+export type RowDetail = {
+    detail: TableDetail,
+    field: string,
+    newData: string
+}
