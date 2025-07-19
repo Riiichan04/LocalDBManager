@@ -15,7 +15,7 @@ export default function EditorFeatureBar({ editorTheme, updateEditorTheme }: Edi
     }
 
     return (
-        <div className="grid grid-cols-12 gap-4 p-2 border-t border-b">
+        <div className="grid grid-cols-12 gap-4 p-2 border-b">
             <div className="col-span-2 flex justify-center">
                 <input className="border rounded p-1 px-2" type="text" placeholder="Chọn một Connection" />
             </div>

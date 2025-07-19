@@ -1,7 +1,6 @@
 import { FeatureType } from "@/types/FeatureType";
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import PowerRoundedIcon from '@mui/icons-material/PowerRounded';
-import BackupTableRoundedIcon from '@mui/icons-material/BackupTableRounded';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import TableViewRoundedIcon from '@mui/icons-material/TableViewRounded';
 import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import ListRoundedIcon from '@mui/icons-material/ListRounded';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
@@ -17,25 +16,17 @@ type FeatureBarProps = {
 
 export default function FeatureBar({ currentFeature, setCurrentFeature }: FeatureBarProps) {
     return (
-        <div className="flex feature-bar">
-            <div className={(currentFeature === FeatureType.HOME ? "active-feature " : " ") + "flex flex-col items-center justify-center flex-1"}
-                onClick={() => setCurrentFeature(FeatureType.HOME)}
+        <div className="flex feature-bar border-b">
+            <div className={(currentFeature === FeatureType.MANAGE ? "active-feature " : " ") + "flex flex-col items-center justify-center flex-1"}
+                onClick={() => setCurrentFeature(FeatureType.MANAGE)}
             >
-                <HomeRoundedIcon sx={{fontSize: '2rem'}} />
-                Trang chủ
+                <DashboardRoundedIcon sx={{fontSize: '2rem'}} />
+                Quản lý
             </div>
-
-            <div className={(currentFeature === FeatureType.CONNECTION ? "active-feature " : " ") + "flex flex-col items-center justify-center flex-1"}
-                onClick={() => setCurrentFeature(FeatureType.CONNECTION)}
-            >
-                <PowerRoundedIcon sx={{fontSize: '2rem'}} />
-                Connection
-            </div>
-
             <div className={(currentFeature === FeatureType.QUERY ? "active-feature " : " ") + "flex flex-col items-center justify-center flex-1"}
                 onClick={() => setCurrentFeature(FeatureType.QUERY)}
             >
-                <BackupTableRoundedIcon sx={{fontSize: '2rem'}} />
+                <TableViewRoundedIcon sx={{fontSize: '2rem'}} />
                 Query
             </div>
 

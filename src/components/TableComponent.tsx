@@ -9,7 +9,11 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import BorderAllRoundedIcon from '@mui/icons-material/BorderAllRounded';
 import '@/styles/table.css'
 
-export default function TableComponent() {
+type TableComponentProps = {
+    currentConnection: DatabaseConnection | null
+}
+
+export default function TableComponent(props: TableComponentProps) {
     const [listDatabase, updateListDatabase] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
     const [expanded, setExpanded] = useState<Set<string>>(new Set())    //Expand DB to see table
@@ -20,69 +24,63 @@ export default function TableComponent() {
 
     const tableRef = useRef<HTMLTableElement>(null)
 
-    const tempConnection = {
-        host: '',
-        username: '',
-        password: '',
-        name: '',
-        port: 3306
-    }
-
     const loadTableFromDatabase = async (dbName: string) => {
-        const isOpen = expanded.has(dbName)
-        const newExpanded = new Set(expanded)
+        if (props.currentConnection) {
 
-        if (isOpen) {
-            newExpanded.delete(dbName)
+            const isOpen = expanded.has(dbName)
+            const newExpanded = new Set(expanded)
+
+            if (isOpen) {
+                newExpanded.delete(dbName)
+            }
+            else newExpanded.add(dbName)
+
+            //Only load if absent
+            if (!listTable[dbName]) {
+                const listTable = await fetchTableFromDatabase({
+                    connection: props.currentConnection, databaseName: dbName
+                })
+                setListTable(prev => ({ ...prev, [dbName]: listTable }))
+            }
+
+            setExpanded(newExpanded)
+            setActiveLine(dbName)
         }
-        else newExpanded.add(dbName)
-
-        //Only load if absent
-        if (!listTable[dbName]) {
-            const listTable = await fetchTableFromDatabase({
-                connection: tempConnection, databaseName: dbName
-            })
-            setListTable(prev => ({ ...prev, [dbName]: listTable }))
-        }
-
-        setExpanded(newExpanded)
-        setActiveLine(dbName)
+        //Add effect here
     }
 
     const loadTableData = async (dbName: string, tableName: string) => {
-        const data = await fetchTableRows({ connection: tempConnection, databaseName: dbName, tableName: tableName })
-        setRows(data)
-        if (data.length > 0) {
-            const tableDataType: FieldDetail[] = await fetchTableDataType({ connection: tempConnection, databaseName: dbName, tableName: tableName })
-            console.log(tableDataType)
-            const listName = Object.keys(data[0])
-            const listColumn: FieldDetail[] = []
-            listName.forEach(name => {
-                const dataType = tableDataType.find(obj => obj.fieldName === name)?.fieldType
-                listColumn.push({ fieldName: name, fieldType: dataType || "" })
-            })
-            setColumns(listColumn)
+        if (props.currentConnection) {
+
+            const data = await fetchTableRows({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
+            setRows(data)
+            if (data.length > 0) {
+                const tableDataType: FieldDetail[] = await fetchTableDataType({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
+                const listName = Object.keys(data[0])
+                const listColumn: FieldDetail[] = []
+                listName.forEach(name => {
+                    const dataType = tableDataType.find(obj => obj.fieldName === name)?.fieldType
+                    listColumn.push({ fieldName: name, fieldType: dataType || "" })
+                })
+                setColumns(listColumn)
+            }
+            setActiveLine(tableName)
         }
-        setActiveLine(tableName)
+        //Add effect here
     }
 
     useEffect(() => {
-        const tempConfig: DatabaseConnection = {
-            host: '',
-            username: '',
-            password: '',
-            name: '',
-            port: 3306
+        const currentConnection = props.currentConnection
+        if (currentConnection) {
+            const fetchDatabaseData = async () => {
+                const listDbs = await fetchDatabase(currentConnection)
+                updateListDatabase(listDbs)
+                setLoading(true)
+            }
+            fetchDatabaseData()
         }
-
-        const fetchDatabaseData = async () => {
-            const listDbs = await fetchDatabase(tempConfig)
-            updateListDatabase(listDbs)
-            setLoading(true)
-        }
-
-        fetchDatabaseData()
-    }, [])
+        //Edit effect here
+    }, [props.currentConnection])
 
     const handleMouseDown = (e: React.MouseEvent, colIndex: number) => {
         const startX = e.clientX
@@ -106,7 +104,7 @@ export default function TableComponent() {
     }
 
     return (
-        <div className="grid grid-cols-12 border-t flex" style={{ height: '100%' }}>
+        <div className="grid grid-cols-12 border-t" style={{ height: '100%' }}>
             {!loading ?
                 <div style={{ height: '100%' }}>
                     <div className="col-span-2 flex items-center justify-center" >
@@ -118,12 +116,12 @@ export default function TableComponent() {
                         {listDatabase.map((db) => (
                             <div key={db}>
                                 <div
-                                    className={`p-2 flex cursor-pointer select-none text-button ${activeLine === db ? 'active-table-bar' : ''}`}
+                                    className={`py-2 px-1 flex cursor-pointer select-none text-button ${activeLine === db ? 'active-table-bar' : ''}`}
                                     onClick={() => loadTableFromDatabase(db)}
                                 >
                                     {expanded.has(db) ? <ExpandMoreRoundedIcon /> : <ChevronRightRoundedIcon />}
                                     <StorageRoundedIcon />
-                                    <span className="ms-2" title={db}>{db}</span>
+                                    <span className="ms-2 truncate" title={db}>{db}</span>
                                 </div>
                                 {expanded.has(db) && (listTable[db] || []).map(table =>
                                     <div key={table} className={`truncate ps-5 cursor-pointer select-none text-button ${activeLine === table ? 'active-table-bar' : ''}`}

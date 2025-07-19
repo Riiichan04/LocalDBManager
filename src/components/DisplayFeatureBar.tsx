@@ -3,19 +3,23 @@
 import { FeatureType } from "@/types/FeatureType"
 import EditorFeatureBar from "./EditorFeatureBar"
 import { EditorTheme } from "@/types/EditorTheme"
+import TableFeatureBar from "./TableFeatureBar"
+import { DatabaseConnection } from "@/types/Connection"
 
 type DisplayFeatureBarProps = {
     currentComponent: FeatureType,
     editorTheme: EditorTheme,
-    updateEditorTheme: (editorTheme: EditorTheme) => void
+    updateEditorTheme: (editorTheme: EditorTheme) => void,
+    currentConnection: DatabaseConnection | null,
+    updateCurrentConnection: (newConnection: DatabaseConnection) => void
 }
 
-export default function DisplayFeatureBar({ currentComponent, editorTheme, updateEditorTheme }: DisplayFeatureBarProps) {
+export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
     const listComponent = {
-        [FeatureType.HOME]: <></>,
-        [FeatureType.CONNECTION]: <></>,
-        [FeatureType.QUERY]: <EditorFeatureBar editorTheme={editorTheme} updateEditorTheme={updateEditorTheme} />,
-        [FeatureType.TABLE]: <></>,
+        [FeatureType.NONE]: <></>,
+        [FeatureType.MANAGE]: <></>,
+        [FeatureType.QUERY]: <EditorFeatureBar editorTheme={props.editorTheme} updateEditorTheme={props.updateEditorTheme} />,
+        [FeatureType.TABLE]: <TableFeatureBar currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
         [FeatureType.INDEX]: <></>,
         [FeatureType.VIEW]: <></>,
         [FeatureType.FUNCTION]: <></>,
@@ -23,5 +27,5 @@ export default function DisplayFeatureBar({ currentComponent, editorTheme, updat
         [FeatureType.TRIGGER]: <></>,
     }
 
-    return listComponent[currentComponent]
+    return listComponent[props.currentComponent]
 }

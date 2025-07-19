@@ -1,4 +1,3 @@
-import { ShowColumnResult } from "@/app/api/table-types/route";
 import { DatabaseConnection, DatabaseTableDetail, FieldDetail, TableDetail } from "@/types/Connection";
 import axios from "axios";
 
