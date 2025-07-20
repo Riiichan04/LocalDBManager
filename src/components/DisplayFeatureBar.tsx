@@ -11,7 +11,8 @@ type DisplayFeatureBarProps = {
     editorTheme: EditorTheme,
     updateEditorTheme: (editorTheme: EditorTheme) => void,
     currentConnection: DatabaseConnection | null,
-    updateCurrentConnection: (newConnection: DatabaseConnection) => void
+    updateCurrentConnection: (newConnection: DatabaseConnection) => void,
+    updateAddNewConnectionForm: () => void
 }
 
 export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
@@ -19,7 +20,7 @@ export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
         [FeatureType.NONE]: <></>,
         [FeatureType.MANAGE]: <></>,
         [FeatureType.QUERY]: <EditorFeatureBar editorTheme={props.editorTheme} updateEditorTheme={props.updateEditorTheme} />,
-        [FeatureType.TABLE]: <TableFeatureBar currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
+        [FeatureType.TABLE]: <TableFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
         [FeatureType.INDEX]: <></>,
         [FeatureType.VIEW]: <></>,
         [FeatureType.FUNCTION]: <></>,

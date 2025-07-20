@@ -25,8 +25,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
     const body = await req.json()
-    const connection: DatabaseConnection = body.connection
-    const language = body.language
+    const connection: DatabaseConnection = body //Temp
+    // const language = body.language
+    const language = "MySQL"
 
     try {
         const filePath = createConnectionFile()
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
             existing.push({ ...connection, language })
         }
 
-        fs.writeFileSync(filePath, JSON.stringify(existing, null, 2), 'utf8')
+        fs.writeFileSync(filePath, JSON.stringify(existing, null, 4), 'utf8')
         return NextResponse.json({ result: true })
     }
     catch (err: unknown) {
@@ -59,7 +60,7 @@ function createConnectionFile(): string {
         const filePath = path.join(dirPath, 'connection.json')
 
         if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true })
-        if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([], null, 2), 'utf8')
+        if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([], null, 4), 'utf8')
         return filePath
     }
     catch (err: unknown) {

@@ -1,5 +1,6 @@
 "use client"
 
+import AddNewConnectionForm from "@/components/AddNewConnectionForm";
 import DisplayComponent from "@/components/DisplayComponent";
 import DisplayFeatureBar from "@/components/DisplayFeatureBar";
 import FeatureBar from "@/components/FeatureBar";
@@ -11,6 +12,7 @@ import { FeatureType, MenuBarType } from "@/types/FeatureType";
 import { useState } from "react";
 
 export default function Home() {
+    const [addNewConnectionFormState, setAddNewConnectionForm] = useState(false)
     const [currentFeature, setCurrentFeature] = useState(FeatureType.NONE)
     const [currentMenuFeature, setMenuFeature] = useState(MenuBarType.HOME)
     const [currentConnection, setCurrentConnection] = useState<DatabaseConnection | null>(null)
@@ -34,12 +36,17 @@ export default function Home() {
         setCurrentConnection(newConnection)
     }
 
+    const updateAddNewForm = () => {
+        setAddNewConnectionForm(!addNewConnectionFormState)
+    }
+
     const featureBarProps = {
         currentComponent: currentFeature,
         editorTheme: currentEditorTheme,
         updateEditorTheme: updateEditorTheme,
         currentConnection: currentConnection,
-        updateCurrentConnection: updateCurrentConnection
+        updateCurrentConnection: updateCurrentConnection,
+        updateAddNewConnectionForm: updateAddNewForm
     }
 
     return (
@@ -56,6 +63,7 @@ export default function Home() {
                     </div>
                 </div>
             }
+            {addNewConnectionFormState && <AddNewConnectionForm setDisplayAddNewConnectionForm={updateAddNewForm} />}
         </div>
 
 

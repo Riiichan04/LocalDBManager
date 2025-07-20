@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 
 type TableFeatureBarProps = {
     currentConnection: DatabaseConnection | null,
-    setCurrentConnection: (newConnection: DatabaseConnection) => void
+    setCurrentConnection: (newConnection: DatabaseConnection) => void,
+    updateAddNewConnectionForm: () => void
 }
 
 export default function TableFeatureBar(props: TableFeatureBarProps) {
@@ -49,7 +50,9 @@ export default function TableFeatureBar(props: TableFeatureBarProps) {
                 </select>
             </div>
             <div className="col-span-2">
-                <button className="p-1 px-2 rounded flex content-center main-cta-button">
+                <button className="p-1 px-2 rounded flex content-center main-cta-button"
+                    onClick={props.updateAddNewConnectionForm}
+                >
                     <AddRoundedIcon className="pe-1" />
                     Thêm một connection
                 </button>
