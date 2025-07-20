@@ -14,13 +14,15 @@ type TableComponentProps = {
 }
 
 export default function TableComponent(props: TableComponentProps) {
-    const [listDatabase, updateListDatabase] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
     const [expanded, setExpanded] = useState<Set<string>>(new Set())    //Expand DB to see table
     const [listTable, setListTable] = useState<Record<string, string[]>>({})  //List loaded table
-    const [rows, setRows] = useState<Record<string, unknown>[]>([])
-    const [columns, setColumns] = useState<FieldDetail[]>([])
-    const [activeLine, setActiveLine] = useState<string>('')
+    const [listDatabase, updateListDatabase] = useState<string[]>([])   //For database display
+    const [rows, setRows] = useState<Record<string, unknown>[]>([]) //For row display
+    const [columns, setColumns] = useState<FieldDetail[]>([])   //For column detail display
+    const [activeLine, setActiveLine] = useState<string>('')    //Current line (db or table)
+    const [selectedCell, setSelectedCell] = useState<{ row: number; col: string } | null>(null) //For effect when clicking a cell
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null) //For soring column
 
     const tableRef = useRef<HTMLTableElement>(null)
 
@@ -69,18 +71,43 @@ export default function TableComponent(props: TableComponentProps) {
         //Add effect here
     }
 
-    useEffect(() => {
-        const currentConnection = props.currentConnection
-        if (currentConnection) {
-            const fetchDatabaseData = async () => {
-                const listDbs = await fetchDatabase(currentConnection)
-                updateListDatabase(listDbs)
-                setLoading(true)
+    const handleSort = (key: string) => {
+        setSortConfig(prev => {
+            if (prev?.key === key) {
+                return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' }
+            } else {
+                return { key, direction: 'asc' }
             }
-            fetchDatabaseData()
-        }
-        //Edit effect here
-    }, [props.currentConnection])
+        })
+    }
+
+    const sortedRows = () => {
+        if (!sortConfig) return rows
+
+        const { key, direction } = sortConfig
+
+        return [...rows].sort((a, b) => {
+            const aVal = a[key]
+            const bVal = b[key]
+
+            // Convert to string for localeCompare if text
+            if (typeof aVal === 'string' && typeof bVal === 'string') {
+                return direction === 'asc'
+                    ? aVal.localeCompare(bVal)
+                    : bVal.localeCompare(aVal)
+            }
+
+            // Convert to number if possible
+            if (typeof aVal === 'number' && typeof bVal === 'number') {
+                return direction === 'asc' ? aVal - bVal : bVal - aVal
+            }
+
+            // Fallback to string compare
+            return direction === 'asc'
+                ? String(aVal).localeCompare(String(bVal))
+                : String(bVal).localeCompare(String(aVal))
+        })
+    }
 
     const handleMouseDown = (e: React.MouseEvent, colIndex: number) => {
         const startX = e.clientX
@@ -102,6 +129,19 @@ export default function TableComponent(props: TableComponentProps) {
         document.addEventListener('mousemove', onMouseMove)
         document.addEventListener('mouseup', onMouseUp)
     }
+
+    useEffect(() => {
+        const currentConnection = props.currentConnection
+        if (currentConnection) {
+            const fetchDatabaseData = async () => {
+                const listDbs = await fetchDatabase(currentConnection)
+                updateListDatabase(listDbs)
+                setLoading(true)
+            }
+            fetchDatabaseData()
+        }
+        //Edit effect here
+    }, [props.currentConnection])
 
     return (
         <div className="grid grid-cols-12 border-t" style={{ height: '100%' }}>
@@ -140,10 +180,16 @@ export default function TableComponent(props: TableComponentProps) {
                             <thead>
                                 <tr>
                                     {columns.map((col, i) => (
-                                        <th key={col.fieldName} className="relative border p-2 text-left bg-gray-100 group">
+                                        <th key={col.fieldName} onClick={() => handleSort(col.fieldName)}
+                                            className="relative border p-2 text-left bg-gray-100 cursor-pointer select-none group">
                                             <div className="truncate">
-                                                <p className="font-semibold" >{col.fieldName}</p>
-                                                <div className="truncate"> {getColumnDataType(col.fieldType)} <span>{col.fieldType}</span> </div>
+                                                <p className="font-semibold flex items-center">
+                                                    {sortConfig?.key === col.fieldName && (
+                                                        <span className="ms-1">{sortConfig.direction === 'asc' ? '▲' : '▼'}</span>
+                                                    )}
+                                                    {col.fieldName}
+                                                </p>
+                                                <div className="truncate">{getColumnDataType(col.fieldType)} <span>{col.fieldType}</span></div>
                                             </div>
                                             <div
                                                 onMouseDown={(e) => handleMouseDown(e, i)}
@@ -154,11 +200,22 @@ export default function TableComponent(props: TableComponentProps) {
                                 </tr>
                             </thead>
                             <tbody style={{ fontSize: '14px' }}>
-                                {rows.map((row, i) => (
+                                {sortedRows().map((row, i) => (
                                     <tr key={i}>
-                                        {columns.map((col) => (
-                                            <td key={col.fieldName} className="border p-2 truncate">{String(row[col.fieldName])}</td>
-                                        ))}
+                                        {columns.map((col) => {
+                                            const isMain = selectedCell?.row === i && selectedCell?.col === col.fieldName
+                                            const isSameRow = selectedCell?.row === i
+
+                                            return (
+                                                <td
+                                                    key={col.fieldName}
+                                                    onClick={() => setSelectedCell({ row: i, col: col.fieldName })}
+                                                    className={`border p-2 truncate cursor-pointer ${isMain ? 'active-row' : isSameRow ? 'active-row-other' : ''}`}
+                                                >
+                                                    {String(row[col.fieldName])}
+                                                </td>
+                                            )
+                                        })}
                                     </tr>
                                 ))}
                             </tbody>

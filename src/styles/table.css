@@ -3,5 +3,9 @@
 }
 
 .active-row {
-    background-color: var(--main-cta-color-hover);
+    background-color: var(--lighter-main-cta-color);
+}
+
+.active-row-other {
+    background-color: var(--lighter-main-cta-color-hover);
 }

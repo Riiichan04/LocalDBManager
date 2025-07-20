@@ -35,6 +35,9 @@
         --main-cta-color-hover: #00b9f2;
         --main-cta-text-color: #faf9f6;
 
+        --lighter-main-cta-color: #0a384c;
+        --lighter-main-cta-color-hover: #002530;
+
         --sub-cta-color: #ffa500;
         --sub-cta-color-hover: #ffc067;
         --sub-cta-text-color: #0b1215;
@@ -51,6 +54,9 @@
         --main-cta-color: #019ce0;
         --main-cta-color-hover: #00b9f2;
         --main-cta-text-color: #faf9f6;
+
+        --lighter-main-cta-color: #66d0fe;
+        --lighter-main-cta-color-hover: #b0edff;
 
         --sub-cta-color: #ffa500;
         --sub-cta-color-hover: #ffc067;
