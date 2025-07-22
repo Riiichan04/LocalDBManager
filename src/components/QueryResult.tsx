@@ -34,32 +34,34 @@ const SelectResultTable = ({ rows }: SelectResultTableProps) => {
     const columns = Object.keys(rows[0])
 
     const formatValue = (value: unknown): string => {
-        if (value === null || value === undefined) return ''
+        if (value === null || value === undefined) return 'null'
         if (typeof value === 'object') return JSON.stringify(value)
         return String(value)
     }
 
     return (
-        <table className="table-auto border border-gray-300 w-full text-sm">
-            <thead className="bg-gray-100">
-                <tr>
-                    {columns.map(col => (
-                        <th key={col} className="border px-2 py-1 text-left">{col}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {rows.map((row, idx) => (
-                    <tr key={idx}>
+        <div className="w-full overflow-auto">
+            <table className=" border border-gray-300 text-sm overflow-auto">
+                <thead className="bg-gray-100">
+                    <tr>
                         {columns.map(col => (
-                            <td key={col} className="border px-2 py-1">
-                                {formatValue(row[col])}
-                            </td>
+                            <th key={col} className="border px-2 py-1 text-left">{col}</th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {rows.map((row, idx) => (
+                        <tr key={idx}>
+                            {columns.map(col => (
+                                <td key={col} className="border px-2 py-1">
+                                    {formatValue(row[col])}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     )
 }
 

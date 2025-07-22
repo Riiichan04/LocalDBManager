@@ -85,8 +85,15 @@ export default function SqlEditor({ currentTheme, queryResult, onGetCurrentQuery
     return (
         <div className="flex flex-col gap-2">
             <div ref={editorRef} className="editor p-0 border" style={{ fontSize: '14px', minHeight: '300px' }}></div>
-            <div className="mt-2">
-                {queryResult && <QueryResultDisplay result={queryResult.result} query={queryResult.query} />}
+            <div className="mt-1 p-1" style={{ minHeight: '10rem' }}>
+                <h5 className='my-1 px-2 font-semibold'>Kết quả truy vấn</h5>
+                {queryResult &&
+                    <>
+                        <div className="result-detail mb-2 px-2">
+                            <p>Thời gian thực hiện: <span>{queryResult.result.executeTime} ms</span></p>
+                        </div>
+                        <QueryResultDisplay result={queryResult.result} query={queryResult.query} />
+                    </>}
             </div>
         </div>
     )

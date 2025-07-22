@@ -16,32 +16,41 @@ export async function POST(req: Request) {
             database: databaseDetail.databaseName
         })
 
+        const startTime = Date.now()
         const [result] = await connection.query<RowDataPacket[] | ResultSetHeader>(query)
         await connection.end()
+        const endTime = Date.now()
+        const runTime = endTime - startTime
 
         const queryType = query.trim().split(/\s+/)[0].toUpperCase()
 
         switch (queryType) {
             case 'SELECT':
-                return NextResponse.json({ type: 'SELECT', rows: result as RowDataPacket[] })
+                return NextResponse.json({
+                    type: 'SELECT', rows: result as RowDataPacket[],
+                    executeTime: runTime
+                })
 
             case 'INSERT':
                 return NextResponse.json({
                     type: 'INSERT',
                     insertId: (result as ResultSetHeader).insertId,
-                    affectedRows: (result as ResultSetHeader).affectedRows
+                    affectedRows: (result as ResultSetHeader).affectedRows,
+                    executeTime: runTime
                 })
 
             case 'UPDATE':
             case 'DELETE':
                 return NextResponse.json({
                     type: queryType,
-                    affectedRows: (result as ResultSetHeader).affectedRows
+                    affectedRows: (result as ResultSetHeader).affectedRows,
+                    executeTime: runTime
                 })
             default:
                 return NextResponse.json({
                     type: 'OTHER',
-                    message: 'Query executed successfully'
+                    message: 'Query executed successfully',
+                    executeTime: runTime
                 })
         }
     } catch (err: unknown) {
