@@ -3,19 +3,22 @@ import SqlEditor from "./SqlEditor"
 import { EditorTheme } from "@/types/EditorTheme"
 import TableComponent from "./TableComponent"
 import { DatabaseConnection } from "@/types/Connection"
+import { QueryResult } from "@/types/QueryResult"
 
 type DisplayComponentProps = {
     currentComponent: FeatureType,
     currentEditorTheme: EditorTheme,
-    currentConnection: DatabaseConnection | null
+    currentConnection: DatabaseConnection | null,
+    queryResult: { result: QueryResult; query: string } | null,
+    onGetCurrentQuery: (getQuery: () => string) => void
 }
 
-export default function DisplayComponent({ currentComponent, currentEditorTheme, currentConnection }: DisplayComponentProps) {
+export default function DisplayComponent(props: DisplayComponentProps) {
     const listComponent = {
         [FeatureType.NONE]: <></>,
         [FeatureType.MANAGE]: <></>,
-        [FeatureType.QUERY]: <SqlEditor currentTheme={currentEditorTheme} />,
-        [FeatureType.TABLE]: <TableComponent currentConnection={currentConnection} />,
+        [FeatureType.QUERY]: <SqlEditor onGetCurrentQuery={props.onGetCurrentQuery} queryResult={props.queryResult} currentTheme={props.currentEditorTheme} />,
+        [FeatureType.TABLE]: <TableComponent currentConnection={props.currentConnection} />,
         [FeatureType.INDEX]: <></>,
         [FeatureType.VIEW]: <></>,
         [FeatureType.FUNCTION]: <></>,
@@ -23,5 +26,5 @@ export default function DisplayComponent({ currentComponent, currentEditorTheme,
         [FeatureType.TRIGGER]: <></>,
     }
 
-    return listComponent[currentComponent]
+    return listComponent[props.currentComponent]
 }

@@ -1,20 +1,27 @@
 "use client"
-
-import { EditorTheme } from "@/types/EditorTheme"
-import { oneDark } from "@codemirror/theme-one-dark"
-import { Compartment, EditorState } from '@codemirror/state'
+import { useEffect, useRef } from 'react'
+import { EditorView, basicSetup } from 'codemirror'
 import { sql } from '@codemirror/lang-sql'
-import { basicSetup, EditorView } from "codemirror"
-import { useEffect, useRef } from "react"
+import { Compartment, EditorState } from '@codemirror/state'
+import { oneDark } from '@codemirror/theme-one-dark'
+import { EditorTheme } from '@/types/EditorTheme'
+import { QueryResultDisplay } from './QueryResult'
+import { QueryResult } from '@/types/QueryResult'
 
 type SqlEditorProps = {
     currentTheme: EditorTheme,
+    queryResult: { result: QueryResult; query: string } | null,
+    onGetCurrentQuery: (getQuery: () => string) => void
 }
 
-export default function SqlEditor({ currentTheme }: SqlEditorProps) {
+export default function SqlEditor({ currentTheme, queryResult, onGetCurrentQuery }: SqlEditorProps) {
     const editorRef = useRef<HTMLDivElement | null>(null)
     const viewRef = useRef<EditorView | null>(null)
     const themeCompartmentRef = useRef(new Compartment())
+
+    const getCurrentQuery = (): string => {
+        return viewRef.current?.state.doc.toString() || ''
+    }
 
     useEffect(() => {
         const listEditorTheme = {
@@ -22,7 +29,6 @@ export default function SqlEditor({ currentTheme }: SqlEditorProps) {
             [EditorTheme.ONEDARK]: [oneDark]
         }
 
-        //If already created, jsut update theme
         if (viewRef.current) {
             const editorTheme = listEditorTheme[currentTheme]
             viewRef.current.dispatch({
@@ -31,15 +37,14 @@ export default function SqlEditor({ currentTheme }: SqlEditorProps) {
             return
         }
 
-        //Create editor in first time render
         if (!editorRef.current) return
 
         const rect = editorRef.current.getBoundingClientRect()
         const top = rect.top
-        const height = window.innerHeight - top
+        const height = window.innerHeight - top - 200
         const lineHeight = 16
         const lineCount = Math.round(height / lineHeight) - 1
-        const defaultText = '' + Array(lineCount).fill('').join('\n')
+        const defaultText = Array(lineCount).fill('').join('\n')
 
         const editorTheme = listEditorTheme[currentTheme]
         const view = new EditorView({
@@ -69,10 +74,20 @@ export default function SqlEditor({ currentTheme }: SqlEditorProps) {
         })
 
         viewRef.current = view
+
+        if (onGetCurrentQuery) {
+            onGetCurrentQuery(() => getCurrentQuery())
+        }
+
         requestAnimationFrame(() => view.requestMeasure())
-    }, [currentTheme])
+    }, [currentTheme, onGetCurrentQuery])
 
     return (
-        <div ref={editorRef} className="editor p-0"></div>
+        <div className="flex flex-col gap-2">
+            <div ref={editorRef} className="editor p-0 border" style={{ fontSize: '14px', minHeight: '300px' }}></div>
+            <div className="mt-2">
+                {queryResult && <QueryResultDisplay result={queryResult.result} query={queryResult.query} />}
+            </div>
+        </div>
     )
 }

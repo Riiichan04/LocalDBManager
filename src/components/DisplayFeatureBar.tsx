@@ -5,6 +5,8 @@ import EditorFeatureBar from "./EditorFeatureBar"
 import { EditorTheme } from "@/types/EditorTheme"
 import TableFeatureBar from "./TableFeatureBar"
 import { DatabaseConnection } from "@/types/Connection"
+import { QueryResult } from "@/types/QueryResult"
+import { RefObject } from "react"
 
 type DisplayFeatureBarProps = {
     currentComponent: FeatureType,
@@ -12,14 +14,30 @@ type DisplayFeatureBarProps = {
     updateEditorTheme: (editorTheme: EditorTheme) => void,
     currentConnection: DatabaseConnection | null,
     updateCurrentConnection: (newConnection: DatabaseConnection) => void,
-    updateAddNewConnectionForm: () => void
+    updateAddNewConnectionForm: () => void,
+    getCurrentQueryRef: RefObject<() => string>
+    currentQuery: string,   ///Will be removed
+    updateCurrentQuery: (query: string) => void,
+    updateQueryResult: (queryResult: { result: QueryResult; query: string } | null) => void,
 }
 
 export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
+    const editorFeatureBarProps = {
+        currentQuery: props.currentQuery,
+        editorTheme: props.editorTheme,
+        updateEditorTheme: props.updateEditorTheme,
+        currentConnection: props.currentConnection,
+        setCurrentConnection: props.updateCurrentConnection,
+        updateCurrentQuery: props.updateCurrentQuery,
+        updateQueryResult: props.updateQueryResult,
+        getCurrentQueryRef: props.getCurrentQueryRef
+    }
+
+
     const listComponent = {
         [FeatureType.NONE]: <></>,
         [FeatureType.MANAGE]: <></>,
-        [FeatureType.QUERY]: <EditorFeatureBar editorTheme={props.editorTheme} updateEditorTheme={props.updateEditorTheme} />,
+        [FeatureType.QUERY]: <EditorFeatureBar {...editorFeatureBarProps} />,
         [FeatureType.TABLE]: <TableFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
         [FeatureType.INDEX]: <></>,
         [FeatureType.VIEW]: <></>,
