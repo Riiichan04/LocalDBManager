@@ -1,0 +1,35 @@
+.bg-element-circle-main {
+    position: absolute;
+    background-color: var(--main-cta-color);
+}
+
+.bg-element-circle-sub {
+    position: absolute;
+    background-color: var(--main-cta-color-hover);
+}
+
+.bg-element-circle-small-main {
+    position: absolute;
+    background-color: var(--sub-cta-color);
+}
+
+.bg-element-circle-small-sub {
+    position: absolute;
+    background-color: var(--sub-cta-color-hover);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.bg-top-right div,
+.bg-top-left div,
+.bg-bottom-right div,
+.bg-bottom-left div {
+  animation: float 4s ease-in-out infinite;
+}

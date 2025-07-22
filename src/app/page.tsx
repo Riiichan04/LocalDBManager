@@ -1,6 +1,7 @@
 "use client"
 
 import AddNewConnectionForm from "@/components/AddNewConnectionForm";
+import ComingSoon from "@/components/ComingSoon";
 import DisplayComponent from "@/components/DisplayComponent";
 import DisplayFeatureBar from "@/components/DisplayFeatureBar";
 import FeatureBar from "@/components/FeatureBar";
@@ -81,15 +82,18 @@ export default function Home() {
             <div className="col-span-2">
                 <MenuBar currentMenuBarFeature={currentMenuFeature} updateCurrentMenuBarFeature={updateMenuBarFeature} />
             </div>
-            {currentMenuFeature === MenuBarType.CONNECTION &&
-                <div className="flex flex-col h-screen col-span-10">
-                    <FeatureBar currentFeature={currentFeature} setCurrentFeature={updateCurrentFeature} />
-                    <DisplayFeatureBar {...featureBarProps} />
-                    <div className="flex-1" style={{ overflow: 'auto' }}>
-                        <DisplayComponent {...componentDisplayProp} />
-                    </div>
-                </div>
-            }
+            <div className="flex flex-col h-screen col-span-10">
+                {currentMenuFeature === MenuBarType.HOME && <ComingSoon />}
+                {currentMenuFeature === MenuBarType.CONNECTION &&
+                    <>
+                        <FeatureBar currentFeature={currentFeature} setCurrentFeature={updateCurrentFeature} />
+                        <DisplayFeatureBar {...featureBarProps} />
+                        <div className="flex-1" style={{ overflow: 'auto' }}>
+                            <DisplayComponent {...componentDisplayProp} />
+                        </div>
+                    </>
+                }
+            </div>
             {addNewConnectionFormState && <AddNewConnectionForm setDisplayAddNewConnectionForm={updateAddNewForm} />}
         </div>
 
