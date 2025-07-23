@@ -19,17 +19,31 @@
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
 }
 
 .bg-top-right div,
 .bg-top-left div,
 .bg-bottom-right div,
 .bg-bottom-left div {
-  animation: float 4s ease-in-out infinite;
+    animation: float 4s ease-in-out infinite;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInContent 0.5s ease 0.5s forwards;
+}
+
+@keyframes fadeInContent {
+    to {
+        opacity: 1;
+    }
 }

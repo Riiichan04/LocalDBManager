@@ -78,13 +78,17 @@ export default function SqlEditor({ currentTheme, queryResult, onGetCurrentQuery
         if (onGetCurrentQuery) {
             onGetCurrentQuery(() => getCurrentQuery())
         }
+        editorRef.current.className = "editor p-0 border "
+        editorRef.current.className += currentTheme === EditorTheme.DEFAULT ? "editor-light-theme " : "editor-onedark-theme"
 
         requestAnimationFrame(() => view.requestMeasure())
     }, [currentTheme, onGetCurrentQuery])
 
     return (
         <div className="flex flex-col gap-2">
-            <div ref={editorRef} className="editor p-0 border" style={{ fontSize: '14px', minHeight: '300px' }}></div>
+            <div ref={editorRef}
+                style={{ fontSize: '14px', minHeight: '300px' }}>
+            </div>
             <div className="mt-1 p-1" style={{ minHeight: '10rem' }}>
                 <h5 className='my-1 px-2 font-semibold'>Kết quả truy vấn</h5>
                 {queryResult &&

@@ -12,7 +12,7 @@ export default function MenuBar({ currentMenuBarFeature, updateCurrentMenuBarFea
     return (
         <div className="col-span-2 border-e relative" style={{ height: '100vh' }}>
             <div className="flex flex-col justify-center items-center mb-5">
-                <h3>LocalSkyDB</h3>
+                <h3>Local DB Manager</h3>
                 <p>Version: 1.0</p>
             </div>
 

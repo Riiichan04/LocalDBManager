@@ -42,7 +42,7 @@ const SelectResultTable = ({ rows }: SelectResultTableProps) => {
     return (
         <div className="w-full overflow-auto">
             <table className=" border border-gray-300 text-sm overflow-auto">
-                <thead className="bg-gray-100">
+                <thead>
                     <tr>
                         {columns.map(col => (
                             <th key={col} className="border px-2 py-1 text-left">{col}</th>

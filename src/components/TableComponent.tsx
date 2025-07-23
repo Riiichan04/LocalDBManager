@@ -145,8 +145,8 @@ export default function TableComponent(props: TableComponentProps) {
 
     return (
         <div className="grid grid-cols-12 border-t" style={{ height: '100%' }}>
-            {!loading ?
-                <div style={{ height: '100%' }}>
+            {!props.currentConnection ? <></> : !loading ?
+                <div className="h-full justify-center flex">
                     <div className="col-span-2 flex items-center justify-center" >
                         <CircularProgress />
                     </div>

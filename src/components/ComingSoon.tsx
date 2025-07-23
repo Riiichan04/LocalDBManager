@@ -44,7 +44,8 @@ export default function ComingSoon() {
                     <div className="w-15 h-15 bg-element-circle-sub rounded-full -bottom-5 left-50"></div>
                 </div>
             </div>
-            <div className="text-center z-10">
+
+            <div className="text-center z-10 fade-in">
                 <p className="font-light mb-5 md:text-6xl text-4xl">COMING SOON</p>
                 <p className='text-gray-60'>Có một thứ gì đó sắp xuất hiện. Hãy chờ nhé!!!</p>
             </div>
