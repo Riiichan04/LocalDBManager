@@ -56,16 +56,17 @@ export default function TableComponent(props: TableComponentProps) {
 
             const data = await fetchTableRows({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
             setRows(data)
+            const tableDataType: FieldDetail[] = await fetchTableDataType({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
+            const listColumn: FieldDetail[] = []
             if (data.length > 0) {
-                const tableDataType: FieldDetail[] = await fetchTableDataType({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
                 const listName = Object.keys(data[0])
-                const listColumn: FieldDetail[] = []
                 listName.forEach(name => {
                     const dataType = tableDataType.find(obj => obj.fieldName === name)?.fieldType
                     listColumn.push({ fieldName: name, fieldType: dataType || "" })
                 })
-                setColumns(listColumn)
             }
+            else listColumn.push(...tableDataType)
+            setColumns(listColumn)
             setActiveLine(tableName)
         }
         //Add effect here
@@ -181,7 +182,7 @@ export default function TableComponent(props: TableComponentProps) {
                                 <tr>
                                     {columns.map((col, i) => (
                                         <th key={col.fieldName} onClick={() => handleSort(col.fieldName)}
-                                            className="relative border p-2 text-left bg-gray-100 cursor-pointer select-none group">
+                                            className="relative border p-2 text-left cursor-pointer select-none group">
                                             <div className="truncate">
                                                 <p className="font-semibold flex items-center">
                                                     {sortConfig?.key === col.fieldName && (
