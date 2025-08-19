@@ -7,7 +7,6 @@ import DisplayFeatureBar from "@/components/DisplayFeatureBar";
 import FeatureBar from "@/components/FeatureBar";
 import MenuBar from "@/components/MenuBar";
 import SettingComponent from "@/components/SettingComponent";
-import { useClientValue } from "@/hooks/useClientValues";
 import { DatabaseConnection } from "@/types/Connection";
 import { EditorTheme } from "@/types/EditorTheme";
 import { FeatureType, MenuBarType } from "@/types/FeatureType";
@@ -20,11 +19,10 @@ export default function Home() {
     const [currentFeature, setCurrentFeature] = useState(FeatureType.NONE)
     const [currentMenuFeature, setMenuFeature] = useState(MenuBarType.HOME)
     const [currentConnection, setCurrentConnection] = useState<DatabaseConnection | null>(null)
-    const [currentTheme, setCurrentTheme] = useState(Theme.DEFAULT)
 
-    const [currentEditorTheme, setCurrentEditorTheme] = useState(
-        useClientValue(() => localStorage.getItem('editor-theme') || "default", "default") === "default" ? EditorTheme.DEFAULT : EditorTheme.ONEDARK
-    )
+    const [currentTheme, setCurrentTheme] = useState(Theme.DEFAULT)
+    const [currentEditorTheme, setCurrentEditorTheme] = useState(EditorTheme.DEFAULT)
+
     const [currentQuery, setCurrentQuery] = useState<string>('')
     const [currentQueryResult, setCurrentQueryResult] = useState<{ result: QueryResult; query: string } | null>(null)
 
@@ -88,6 +86,9 @@ export default function Home() {
     useEffect(() => {
         const themeFromStorage = localStorage.getItem('theme') || 'light-theme'
         setCurrentTheme(themeFromStorage === 'dark-theme' ? Theme.DARK : Theme.DEFAULT)
+
+        const editorTheme = localStorage.getItem('editor-theme') || 'default'
+        setCurrentEditorTheme(editorTheme === "default" ? EditorTheme.DEFAULT : EditorTheme.ONEDARK)
     }, [])
 
     return (
