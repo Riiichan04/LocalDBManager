@@ -2,8 +2,10 @@ import { FeatureType } from "@/types/FeatureType"
 import SqlEditor from "./SqlEditor"
 import { EditorTheme } from "@/types/EditorTheme"
 import TableComponent from "./TableComponent"
+import ManageConnection from "./ManageConnection"
 import { DatabaseConnection } from "@/types/Connection"
 import { QueryResult } from "@/types/QueryResult"
+import { useState } from "react"
 
 type DisplayComponentProps = {
     currentComponent: FeatureType,
@@ -16,7 +18,7 @@ type DisplayComponentProps = {
 export default function DisplayComponent(props: DisplayComponentProps) {
     const listComponent = {
         [FeatureType.NONE]: <></>,
-        [FeatureType.MANAGE]: <></>,
+        [FeatureType.MANAGE]: <ManageConnection />,
         [FeatureType.QUERY]: <SqlEditor onGetCurrentQuery={props.onGetCurrentQuery} queryResult={props.queryResult} currentTheme={props.currentEditorTheme} />,
         [FeatureType.TABLE]: <TableComponent currentConnection={props.currentConnection} />,
         [FeatureType.INDEX]: <></>,

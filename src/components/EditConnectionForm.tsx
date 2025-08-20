@@ -1,14 +1,16 @@
-import { createAndSaveNewConnection } from '@/services/connectionService';
+import { updateConnection } from '@/services/connectionService';
 import { DatabaseConnection } from '@/types/Connection';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useRef, useState } from 'react';
 import SnackBarComponent from './SnackBarComponent';
 
-type AddNewConnectionFormProps = {
-    setDisplayAddNewConnectionForm: () => void
+type EditConnectionFormProps = {
+    setDisplayEditConnectionForm: () => void,
+    index: number,
+    connection: DatabaseConnection | null
 }
 
-export default function AddNewConnectionForm(props: AddNewConnectionFormProps) {
+export default function EditConnectionForm(props: EditConnectionFormProps) {
     const [snackbarState, setSnackbarState] = useState(false);
     const [addResult, setResult] = useState<boolean | null>(null)
 
@@ -20,7 +22,7 @@ export default function AddNewConnectionForm(props: AddNewConnectionFormProps) {
         password: useRef<HTMLInputElement>(null),
     }
 
-    const createNewConnection = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const editConnection = async (event: React.MouseEvent<HTMLButtonElement>) => {
         //Disable button to prevent spam
         const button = event.currentTarget
         button.disabled = true
@@ -41,7 +43,7 @@ export default function AddNewConnectionForm(props: AddNewConnectionFormProps) {
             password: passEle.value,
         }
 
-        const result = await createAndSaveNewConnection(newConnection)
+        const result = await updateConnection(newConnection, props.index)
         setResult(result.result)
         setSnackbarState(true)
 
@@ -55,15 +57,15 @@ export default function AddNewConnectionForm(props: AddNewConnectionFormProps) {
     }
 
     return (
-        <div className="absolute w-full h-full flex items-center justify-center" style={{ color: 'black' }}>
+        <div className="absolute w-full h-full flex items-center justify-center" style={{ color: 'black', top: '0' }}>
             <div className="bg-black opacity-50 w-full h-full absolute z-0"
-                onClick={props.setDisplayAddNewConnectionForm}
+                onClick={props.setDisplayEditConnectionForm}
             ></div>
 
             <div className="p-3 px-6 bg-white z-10 rounded relative">
                 <div className="form--header flex justify-between">
                     <h5 className="font-semibold">Thêm một connection mới</h5>
-                    <div className='form--close-button cursor-pointer' onClick={props.setDisplayAddNewConnectionForm}>
+                    <div className='form--close-button cursor-pointer' onClick={props.setDisplayEditConnectionForm}>
                         <CloseRoundedIcon />
                     </div>
                 </div>
@@ -71,30 +73,30 @@ export default function AddNewConnectionForm(props: AddNewConnectionFormProps) {
                 <div className="mt-15" >
                     <div className="my-3 flex justify-between items-center">
                         <p>Tên connection:</p>
-                        <input ref={refs.name} id="form-connection-name" className="px-2 py-1 border rounded ms-3" type="text" />
+                        <input defaultValue={props.connection?.name || ""} ref={refs.name} id="form-connection-name" className="px-2 py-1 border rounded ms-3" type="text" />
                     </div>
                     <div className="my-3 flex justify-between items-center">
                         <p>Host:</p>
-                        <input ref={refs.host} id="form-connection-host" className="px-2 py-1 border rounded ms-3" type="text" />
+                        <input defaultValue={props.connection?.host || ""} ref={refs.host} id="form-connection-host" className="px-2 py-1 border rounded ms-3" type="text" />
                     </div>
                     <div className="my-3 flex justify-between items-center">
                         <p>Port:</p>
-                        <input ref={refs.port} id="form-connection-port" className="px-2 py-1 border rounded ms-3" type="number" />
+                        <input defaultValue={props.connection?.port || ""} ref={refs.port} id="form-connection-port" className="px-2 py-1 border rounded ms-3" type="number" />
                     </div>
                     <div className="my-3 flex justify-between items-center">
                         <p>Username:</p>
-                        <input ref={refs.username} id="form-connection-username" className="px-2 py-1 border rounded ms-3" type="text" />
+                        <input defaultValue={props.connection?.username || ""} ref={refs.username} id="form-connection-username" className="px-2 py-1 border rounded ms-3" type="text" />
                     </div>
                     <div className="my-3 flex justify-between items-center">
                         <p>Password:</p>
-                        <input ref={refs.password} id="form-connection-password" className="px-2 py-1 border rounded ms-3" type="password" />
+                        <input defaultValue={props.connection?.password || ""} ref={refs.password} id="form-connection-password" className="px-2 py-1 border rounded ms-3" type="password" />
                     </div>
 
                     <div className='flex justify-end mt-8'>
                         <button className='rounded border-0 main-cta-button p-2 cursor-pointer'
-                            onClick={createNewConnection}
+                            onClick={editConnection}
                         >
-                            Thêm connection
+                            Cập nhật
                         </button>
                     </div>
                 </div>
@@ -103,8 +105,8 @@ export default function AddNewConnectionForm(props: AddNewConnectionFormProps) {
                         closeSnackBar={() => setSnackbarState(false)}
                         result={addResult}
                         message={{
-                            success: "Thêm connection thành công",
-                            failed: "Thêm connection thất bại",
+                            success: "Cập nhật connection thành công",
+                            failed: "Cập nhật connection thất bại",
                             neutral: null
                         }} />
                 }

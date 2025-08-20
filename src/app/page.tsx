@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
     const [addNewConnectionFormState, setAddNewConnectionForm] = useState(false)
+
     const [currentFeature, setCurrentFeature] = useState(FeatureType.NONE)
     const [currentMenuFeature, setMenuFeature] = useState(MenuBarType.HOME)
     const [currentConnection, setCurrentConnection] = useState<DatabaseConnection | null>(null)
@@ -47,6 +48,8 @@ export default function Home() {
     const updateAddNewForm = () => {
         setAddNewConnectionForm(!addNewConnectionFormState)
     }
+
+    
 
     const updateCurrentQuery = (query: string) => {
         setCurrentQuery(query)
@@ -96,7 +99,7 @@ export default function Home() {
             <div className="col-span-2">
                 <MenuBar currentMenuBarFeature={currentMenuFeature} updateCurrentMenuBarFeature={updateMenuBarFeature} />
             </div>
-            <div className="flex flex-col h-screen col-span-10">
+            <div className="relative flex flex-col h-screen col-span-10">
                 {currentMenuFeature === MenuBarType.HOME && <ComingSoon />}
                 {currentMenuFeature === MenuBarType.CONNECTION &&
                     <>

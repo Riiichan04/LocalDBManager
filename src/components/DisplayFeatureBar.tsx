@@ -8,6 +8,7 @@ import { DatabaseConnection } from "@/types/Connection"
 import { QueryResult } from "@/types/QueryResult"
 import { RefObject } from "react"
 import ComingSoon from "./ComingSoon"
+import ManageConnectionFeatureBar from "./ManageConnectionFeatureBar"
 
 type DisplayFeatureBarProps = {
     currentComponent: FeatureType,
@@ -37,7 +38,7 @@ export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
 
     const listComponent = {
         [FeatureType.NONE]: <ComingSoon />,
-        [FeatureType.MANAGE]: <ComingSoon />,
+        [FeatureType.MANAGE]: <ManageConnectionFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} />,
         [FeatureType.QUERY]: <EditorFeatureBar {...editorFeatureBarProps} />,
         [FeatureType.TABLE]: <TableFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
         [FeatureType.INDEX]: <ComingSoon />,

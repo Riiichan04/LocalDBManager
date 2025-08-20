@@ -14,3 +14,22 @@ export async function createAndSaveNewConnection(config: DatabaseConnection) {
     })
     return res.data
 }
+
+export async function deleteConnection(connectionIndex: number) {
+    const res = await axios.delete('/api/connections', {
+        data: connectionIndex,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return res.data
+}
+
+export async function updateConnection(updateInfo: DatabaseConnection, index: number) {
+    const res = await axios.put('/api/connections', { connection: updateInfo, updateIndex: index }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return res.data
+}

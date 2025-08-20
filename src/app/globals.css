@@ -29,7 +29,7 @@
     .dark-theme {
         --background-color: #162228;
         --text-color: #faf9f6;
-        --text-color-hover: #cfcece;
+        --text-color-hover: #dedede;
 
         --main-cta-color: #019ce0;
         --main-cta-color-hover: #00b9f2;
@@ -38,8 +38,8 @@
         --lighter-main-cta-color: #0a384c;
         --lighter-main-cta-color-hover: #002530;
 
-        --sub-cta-color: #ffa500;
-        --sub-cta-color-hover: #ffc067;
+        --sub-cta-color: #ff8800;
+        --sub-cta-color-hover: #ffb157;
         --sub-cta-text-color: #0b1215;
 
         background-color: var(--background-color);
@@ -58,8 +58,8 @@
         --lighter-main-cta-color: #66d0fe;
         --lighter-main-cta-color-hover: #b0edff;
 
-        --sub-cta-color: #ffa500;
-        --sub-cta-color-hover: #ffc067;
+        --sub-cta-color: #ff8800;
+        --sub-cta-color-hover: #ffb157;
         --sub-cta-text-color: #0b1215;
 
         background-color: var(--background-color);

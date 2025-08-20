@@ -50,7 +50,7 @@ export default function TableFeatureBar(props: TableFeatureBarProps) {
                 </select>
             </div>
             <div className="col-span-2">
-                <button className="p-1 px-2 rounded flex content-center main-cta-button"
+                <button className="p-1 px-2 rounded flex content-center main-cta-button cursor-pointer"
                     onClick={props.updateAddNewConnectionForm}
                 >
                     <AddRoundedIcon className="pe-1" />

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import fs from 'fs'
 import path from 'path'
 
+//Get list connections
 export async function GET() {
     try {
         let existing = []
@@ -23,6 +24,7 @@ export async function GET() {
     }
 }
 
+//Upload new connection
 export async function POST(req: Request) {
     const body = await req.json()
     const connection: DatabaseConnection = body //Temp
@@ -45,6 +47,68 @@ export async function POST(req: Request) {
 
             existing.push({ ...connection, language })
         }
+
+        fs.writeFileSync(filePath, JSON.stringify(existing, null, 4), 'utf8')
+        return NextResponse.json({ result: true })
+    }
+    catch (err: unknown) {
+        return NextResponse.json({ result: false, message: err }, { status: 500 })
+    }
+}
+
+//Delete connection by index
+export async function DELETE(req: Request) {
+    const body = await req.json()
+    const connectionIndex: number = body
+
+    try {
+        const filePath = createConnectionFile()
+        let existing = []
+        if (fs.existsSync(filePath)) {
+            const content = fs.readFileSync(filePath, 'utf8')
+            try {
+                const parsed = JSON.parse(content)
+                if (Array.isArray(parsed)) {
+                    existing = parsed
+                }
+            } catch {
+                existing = []
+            }
+            existing = existing.filter((ele, index) => index !== connectionIndex)
+        }
+
+        fs.writeFileSync(filePath, JSON.stringify(existing, null, 4), 'utf8')
+        return NextResponse.json({ result: true })
+    }
+    catch (err: unknown) {
+        return NextResponse.json({ result: false, message: err }, { status: 500 })
+    }
+}
+
+//Update current connection
+export async function PUT(req: Request) {
+    const body = await req.json()
+    const updatedConnectionDetail: DatabaseConnection = body.connection
+    const updatedIndex: number = body.updateIndex
+    const language = "MySQL"    //Temp
+
+    try {
+        const filePath = createConnectionFile()
+        let existing = []
+        if (fs.existsSync(filePath)) {
+            const content = fs.readFileSync(filePath, 'utf8')
+            try {
+                const parsed = JSON.parse(content)
+                if (Array.isArray(parsed)) {
+                    existing = parsed
+                }
+            } catch {
+                existing = []
+            }
+
+        }
+
+        existing[updatedIndex] = { ...updatedConnectionDetail, language }
 
         fs.writeFileSync(filePath, JSON.stringify(existing, null, 4), 'utf8')
         return NextResponse.json({ result: true })
