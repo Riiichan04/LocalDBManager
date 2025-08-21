@@ -2,7 +2,7 @@ import { updateConnection } from '@/services/connectionService';
 import { DatabaseConnection } from '@/types/Connection';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useRef, useState } from 'react';
-import SnackBarComponent from './SnackBarComponent';
+import SnackBarComponent from '../SnackBarComponent';
 
 type EditConnectionFormProps = {
     setDisplayEditConnectionForm: () => void,
@@ -64,7 +64,7 @@ export default function EditConnectionForm(props: EditConnectionFormProps) {
 
             <div className="p-3 px-6 bg-white z-10 rounded relative">
                 <div className="form--header flex justify-between">
-                    <h5 className="font-semibold">Thêm một connection mới</h5>
+                    <h5 className="font-semibold">Chỉnh sửa connection</h5>
                     <div className='form--close-button cursor-pointer' onClick={props.setDisplayEditConnectionForm}>
                         <CloseRoundedIcon />
                     </div>

@@ -1,14 +1,14 @@
 "use client"
 
 import { FeatureType } from "@/types/FeatureType"
-import EditorFeatureBar from "./EditorFeatureBar"
+import EditorFeatureBar from "./feature_bars/EditorFeatureBar"
 import { EditorTheme } from "@/types/EditorTheme"
-import TableFeatureBar from "./TableFeatureBar"
+import TableFeatureBar from "./feature_bars/TableFeatureBar"
 import { DatabaseConnection } from "@/types/Connection"
 import { QueryResult } from "@/types/QueryResult"
 import { RefObject } from "react"
 import ComingSoon from "./ComingSoon"
-import ManageConnectionFeatureBar from "./ManageConnectionFeatureBar"
+import ManageConnectionFeatureBar from "./feature_bars/ManageConnectionFeatureBar"
 
 type DisplayFeatureBarProps = {
     currentComponent: FeatureType,

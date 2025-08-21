@@ -2,7 +2,7 @@ import { deleteConnection, getConnection } from "@/services/connectionService"
 import { DatabaseConnection } from "@/types/Connection"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useState } from "react"
-import EditConnectionForm from "./EditConnectionForm"
+import EditConnectionForm from "./forms/EditConnectionForm"
 
 export default function ManageConnection() {
     const [isLoading, setLoading] = useState(false)
@@ -43,9 +43,9 @@ export default function ManageConnection() {
 
     return (
         <>
-            <table className="min-w-max border-collapse border-b-0  table-fixed w-full">
+            <table className="min-w-max border-collapse border-b-0 table-fixed w-full">
                 <thead>
-                    <tr>
+                    <tr className="border-t">
                         <th className="border-b"><h5 className="text-start p-2 font-bold">Connection</h5></th>
                         <th className="border-b"><h5 className="text-start p-2 font-bold">Loại connection</h5></th>
                         <th className="border-b"><h5 className="text-start p-2 font-bold">Ngày tạo</h5></th>

@@ -1,6 +1,6 @@
 "use client"
 
-import AddNewConnectionForm from "@/components/AddNewConnectionForm";
+import AddNewConnectionForm from "@/components/forms/AddNewConnectionForm";
 import ComingSoon from "@/components/ComingSoon";
 import DisplayComponent from "@/components/DisplayComponent";
 import DisplayFeatureBar from "@/components/DisplayFeatureBar";
@@ -17,8 +17,8 @@ import { useEffect, useRef, useState } from "react";
 export default function Home() {
     const [addNewConnectionFormState, setAddNewConnectionForm] = useState(false)
 
-    const [currentFeature, setCurrentFeature] = useState(FeatureType.NONE)
     const [currentMenuFeature, setMenuFeature] = useState(MenuBarType.HOME)
+    const [currentFeature, setCurrentFeature] = useState(FeatureType.MANAGE)
     const [currentConnection, setCurrentConnection] = useState<DatabaseConnection | null>(null)
 
     const [currentTheme, setCurrentTheme] = useState(Theme.DEFAULT)

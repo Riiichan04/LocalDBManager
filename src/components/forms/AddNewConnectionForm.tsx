@@ -2,7 +2,7 @@ import { createAndSaveNewConnection } from '@/services/connectionService';
 import { DatabaseConnection } from '@/types/Connection';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useRef, useState } from 'react';
-import SnackBarComponent from './SnackBarComponent';
+import SnackBarComponent from '../SnackBarComponent';
 
 type AddNewConnectionFormProps = {
     setDisplayAddNewConnectionForm: () => void
