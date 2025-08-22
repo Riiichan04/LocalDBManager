@@ -9,7 +9,10 @@ import '@/styles/table.css'
 
 type DisplayDatabaseBarProps = {
     currentConnection: DatabaseConnection | null,
-    loadTableData: (dbName: string, tableName: string) => Promise<string>
+    //Optional behavior for each feature that used this component
+    handleTableAction?: (dbName: string, tableName: string) => Promise<string>,
+    handleDatabaseAction?: (dbName: string) => void,
+    isNotExpaned?: true
 }
 
 export default function DisplayDatabaseBar(props: DisplayDatabaseBarProps) {
@@ -19,8 +22,7 @@ export default function DisplayDatabaseBar(props: DisplayDatabaseBarProps) {
     const [activeLine, setActiveLine] = useState<string>('')    //Current line (db or table)
 
     const loadTableFromDatabase = async (dbName: string) => {
-        if (props.currentConnection) {
-
+        if (props.currentConnection && !props.isNotExpaned) {
             const isOpen = expanded.has(dbName)
             const newExpanded = new Set(expanded)
 
@@ -61,17 +63,20 @@ export default function DisplayDatabaseBar(props: DisplayDatabaseBarProps) {
                     <div key={db}>
                         <div
                             className={`py-2 px-1 flex cursor-pointer select-none text-button ${activeLine === db ? 'active-table-bar' : ''}`}
-                            onClick={() => loadTableFromDatabase(db)}
+                            onClick={() => (props.handleDatabaseAction ?? loadTableFromDatabase)?.(db)}
                         >
                             {expanded.has(db) ? <ExpandMoreRoundedIcon /> : <ChevronRightRoundedIcon />}
                             <StorageRoundedIcon />
                             <span className="ms-2 truncate" title={db}>{db}</span>
                         </div>
-                        {expanded.has(db) && (listTable[db] || []).map(table =>
+                        {!props.isNotExpaned && expanded.has(db) && (listTable[db] || []).map(table =>
                             <div key={table} className={`truncate ps-5 cursor-pointer select-none text-button ${activeLine === table ? 'active-table-bar' : ''}`}
                                 onClick={async () => {
-                                    const activeTable = await props.loadTableData(db, table)
-                                    setActiveLine(activeTable)
+                                    if (props.handleTableAction) {
+                                        const activeTable = await props.handleTableAction(db, table)
+                                        setActiveLine(activeTable)
+                                    }
+
                                 }}
                             >
                                 <BorderAllRoundedIcon sx={{ fontSize: '14px' }} />

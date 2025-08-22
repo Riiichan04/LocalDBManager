@@ -39,3 +39,9 @@ export async function fetchTableIndex(config: TableDetail) {
     const res = await axios.post('/api/database-index', config)
     return res.data
 }
+
+//Get all trigger from a database
+export async function fetchDatabaseTrigger(config: DatabaseTableDetail) {
+    const res = await axios.post('/api/database-triggers', config)
+    return res.data
+}

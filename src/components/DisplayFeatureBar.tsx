@@ -45,7 +45,7 @@ export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
         [FeatureType.VIEW]: <></>,
         [FeatureType.FUNCTION]: <></>,
         [FeatureType.USER]: <></>,
-        [FeatureType.TRIGGER]: <></>,
+        [FeatureType.TRIGGER]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
     }
 
     return listComponent[props.currentComponent]

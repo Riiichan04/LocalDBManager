@@ -7,6 +7,7 @@ import { DatabaseConnection } from "@/types/Connection"
 import { QueryResult } from "@/types/QueryResult"
 import DatabaseIndexComponent from "./DatabaseIndexComponent"
 import ComingSoon from "./ComingSoon"
+import DatabaseTriggerComponent from "./DatabaseTriggerComponent"
 
 type DisplayComponentProps = {
     currentComponent: FeatureType,
@@ -26,7 +27,7 @@ export default function DisplayComponent(props: DisplayComponentProps) {
         [FeatureType.VIEW]: <ComingSoon />,
         [FeatureType.FUNCTION]: <ComingSoon />,
         [FeatureType.USER]: <ComingSoon />,
-        [FeatureType.TRIGGER]: <ComingSoon />,
+        [FeatureType.TRIGGER]: <DatabaseTriggerComponent currentConnection={props.currentConnection} />,
     }
 
     return listComponent[props.currentComponent]
