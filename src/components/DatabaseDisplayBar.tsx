@@ -1,5 +1,5 @@
-import { fetchDatabase, fetchTableDataType, fetchTableFromDatabase, fetchTableRows } from "@/services/databaseService"
-import { DatabaseConnection, FieldDetail } from "@/types/Connection"
+import { fetchDatabase, fetchTableFromDatabase } from "@/services/databaseService"
+import { DatabaseConnection } from "@/types/Connection"
 import { useEffect, useState } from "react"
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
@@ -7,12 +7,12 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import BorderAllRoundedIcon from '@mui/icons-material/BorderAllRounded';
 import '@/styles/table.css'
 
-type DatabaseIndexComponentProps = {
+type DisplayDatabaseBarProps = {
     currentConnection: DatabaseConnection | null,
-    loadTableData: (dbName: string, tableName: string) => void
+    loadTableData: (dbName: string, tableName: string) => Promise<string>
 }
 
-export default function DisplayDatabaseBar(props: DatabaseIndexComponentProps) {
+export default function DisplayDatabaseBar(props: DisplayDatabaseBarProps) {
     const [expanded, setExpanded] = useState<Set<string>>(new Set())    //Expand DB to see table
     const [listTable, setListTable] = useState<Record<string, string[]>>({})  //List loaded table
     const [listDatabase, updateListDatabase] = useState<string[]>([])   //For database display
@@ -38,7 +38,6 @@ export default function DisplayDatabaseBar(props: DatabaseIndexComponentProps) {
             }
 
             setExpanded(newExpanded)
-            setActiveLine(dbName)
         }
         //Add effect here
     }
@@ -70,7 +69,10 @@ export default function DisplayDatabaseBar(props: DatabaseIndexComponentProps) {
                         </div>
                         {expanded.has(db) && (listTable[db] || []).map(table =>
                             <div key={table} className={`truncate ps-5 cursor-pointer select-none text-button ${activeLine === table ? 'active-table-bar' : ''}`}
-                                onClick={() => props.loadTableData(db, table)}
+                                onClick={async () => {
+                                    const activeTable = await props.loadTableData(db, table)
+                                    setActiveLine(activeTable)
+                                }}
                             >
                                 <BorderAllRoundedIcon sx={{ fontSize: '14px' }} />
                                 <span className="ms-2" title={table}>{table}</span>

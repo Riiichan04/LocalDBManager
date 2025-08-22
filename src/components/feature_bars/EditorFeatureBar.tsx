@@ -53,7 +53,6 @@ export default function EditorFeatureBar(props: EditorFeatureBarProps) {
 
     const runQuery = async () => {
         const query = props.getCurrentQueryRef.current()
-        console.log(query)
         props.updateCurrentQuery(query)
         const connection = props.currentConnection
         if (connection && currentDatabase) {

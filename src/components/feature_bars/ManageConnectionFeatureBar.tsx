@@ -1,7 +1,4 @@
-// import { getConnection } from '@/services/connectionService';
-// import { DatabaseConnection } from '@/types/Connection';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-// import { useEffect, useState } from 'react';
 
 type ManageConnectionFeatureBarProps = {
     updateAddNewConnectionForm: () => void

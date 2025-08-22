@@ -1,6 +1,7 @@
 import { DatabaseConnection, DatabaseTableDetail, FieldDetail, TableDetail } from "@/types/Connection";
 import axios from "axios";
 
+//Get all databases from a connection
 export async function fetchDatabase(config: DatabaseConnection): Promise<string[]> {
     const res = await axios.post<string[]>('/api/databases', config, {
         headers: {
@@ -10,6 +11,7 @@ export async function fetchDatabase(config: DatabaseConnection): Promise<string[
     return res.data
 }
 
+//Get all tables from a database
 export async function fetchTableFromDatabase(config: DatabaseTableDetail): Promise<string[]> {
     const res = await axios.post<string[]>('/api/tables', config, {
         headers: {
@@ -19,12 +21,21 @@ export async function fetchTableFromDatabase(config: DatabaseTableDetail): Promi
     return res.data
 }
 
+
+//Get all data from a table
 export async function fetchTableRows(config: TableDetail): Promise<Record<string, unknown>[]> {
     const res = await axios.post('/api/fields', config)
     return res.data
 }
 
+//Get all column type from a table
 export async function fetchTableDataType(config: TableDetail): Promise<FieldDetail[]> {
     const res = await axios.post('/api/table-types', config)
+    return res.data
+}
+
+//Get all index from a table
+export async function fetchTableIndex(config: TableDetail) {
+    const res = await axios.post('/api/database-index', config)
     return res.data
 }

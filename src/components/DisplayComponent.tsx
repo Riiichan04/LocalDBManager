@@ -5,7 +5,8 @@ import TableComponent from "./TableComponent"
 import ManageConnection from "./ManageConnection"
 import { DatabaseConnection } from "@/types/Connection"
 import { QueryResult } from "@/types/QueryResult"
-import { useState } from "react"
+import DatabaseIndexComponent from "./DatabaseIndexComponent"
+import ComingSoon from "./ComingSoon"
 
 type DisplayComponentProps = {
     currentComponent: FeatureType,
@@ -17,15 +18,15 @@ type DisplayComponentProps = {
 
 export default function DisplayComponent(props: DisplayComponentProps) {
     const listComponent = {
-        [FeatureType.NONE]: <></>,
+        [FeatureType.NONE]: <ComingSoon />,
         [FeatureType.MANAGE]: <ManageConnection />,
         [FeatureType.QUERY]: <SqlEditor onGetCurrentQuery={props.onGetCurrentQuery} queryResult={props.queryResult} currentTheme={props.currentEditorTheme} />,
         [FeatureType.TABLE]: <TableComponent currentConnection={props.currentConnection} />,
-        [FeatureType.INDEX]: <></>,
-        [FeatureType.VIEW]: <></>,
-        [FeatureType.FUNCTION]: <></>,
-        [FeatureType.USER]: <></>,
-        [FeatureType.TRIGGER]: <></>,
+        [FeatureType.INDEX]: <DatabaseIndexComponent currentConnection={props.currentConnection} />,
+        [FeatureType.VIEW]: <ComingSoon />,
+        [FeatureType.FUNCTION]: <ComingSoon />,
+        [FeatureType.USER]: <ComingSoon />,
+        [FeatureType.TRIGGER]: <ComingSoon />,
     }
 
     return listComponent[props.currentComponent]

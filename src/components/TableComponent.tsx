@@ -5,7 +5,7 @@ import { DataTypeIcon } from "@/types/IconType"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import '@/styles/table.css'
-import DisplayDatabaseBar from "./DisplayDatabaseBar"
+import DisplayDatabaseBar from "./DatabaseDisplayBar"
 
 type TableComponentProps = {
     currentConnection: DatabaseConnection | null
@@ -19,9 +19,9 @@ export default function TableComponent(props: TableComponentProps) {
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null) //For soring column
 
     const tableRef = useRef<HTMLTableElement>(null)
-    const loadTableData = async (dbName: string, tableName: string) => {
-        if (props.currentConnection) {
 
+    const loadTableData = async (dbName: string, tableName: string): Promise<string> => {
+        if (props.currentConnection) {
             const data = await fetchTableRows({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
             setRows(data)
             const tableDataType: FieldDetail[] = await fetchTableDataType({ connection: props.currentConnection, databaseName: dbName, tableName: tableName })
@@ -36,7 +36,9 @@ export default function TableComponent(props: TableComponentProps) {
             else listColumn.push(...tableDataType)
             setColumns(listColumn)
             // setActiveLine(tableName)
+            return tableName
         }
+        return ""
         //Add effect here
     }
 
@@ -120,7 +122,6 @@ export default function TableComponent(props: TableComponentProps) {
                 </div> :
                 <>
                     <DisplayDatabaseBar currentConnection={props.currentConnection} loadTableData={loadTableData} />
-
                     <div className="col-span-10" style={{ overflow: 'auto' }}>
                         <table ref={tableRef} className="min-w-max border-collapse border border-gray-300 table-fixed w-full">
                             <thead>

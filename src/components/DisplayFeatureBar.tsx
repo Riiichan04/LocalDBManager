@@ -7,8 +7,8 @@ import TableFeatureBar from "./feature_bars/TableFeatureBar"
 import { DatabaseConnection } from "@/types/Connection"
 import { QueryResult } from "@/types/QueryResult"
 import { RefObject } from "react"
-import ComingSoon from "./ComingSoon"
 import ManageConnectionFeatureBar from "./feature_bars/ManageConnectionFeatureBar"
+import DatabaseIndexFeatureBar from "./feature_bars/DatabaseIndexFeatureBar"
 
 type DisplayFeatureBarProps = {
     currentComponent: FeatureType,
@@ -37,15 +37,15 @@ export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
 
 
     const listComponent = {
-        [FeatureType.NONE]: <ComingSoon />,
+        [FeatureType.NONE]: <></>,
         [FeatureType.MANAGE]: <ManageConnectionFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} />,
         [FeatureType.QUERY]: <EditorFeatureBar {...editorFeatureBarProps} />,
         [FeatureType.TABLE]: <TableFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
-        [FeatureType.INDEX]: <ComingSoon />,
-        [FeatureType.VIEW]: <ComingSoon />,
-        [FeatureType.FUNCTION]: <ComingSoon />,
-        [FeatureType.USER]: <ComingSoon />,
-        [FeatureType.TRIGGER]: <ComingSoon />,
+        [FeatureType.INDEX]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
+        [FeatureType.VIEW]: <></>,
+        [FeatureType.FUNCTION]: <></>,
+        [FeatureType.USER]: <></>,
+        [FeatureType.TRIGGER]: <></>,
     }
 
     return listComponent[props.currentComponent]
