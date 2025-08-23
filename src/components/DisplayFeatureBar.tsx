@@ -42,9 +42,9 @@ export default function DisplayFeatureBar(props: DisplayFeatureBarProps) {
         [FeatureType.QUERY]: <EditorFeatureBar {...editorFeatureBarProps} />,
         [FeatureType.TABLE]: <TableFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
         [FeatureType.INDEX]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
-        [FeatureType.VIEW]: <></>,
-        [FeatureType.FUNCTION]: <></>,
-        [FeatureType.USER]: <></>,
+        [FeatureType.VIEW]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
+        [FeatureType.FUNCTION]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
+        [FeatureType.USER]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
         [FeatureType.TRIGGER]: <DatabaseIndexFeatureBar updateAddNewConnectionForm={props.updateAddNewConnectionForm} currentConnection={props.currentConnection} setCurrentConnection={props.updateCurrentConnection} />,
     }
 

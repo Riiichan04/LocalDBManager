@@ -16,9 +16,10 @@ export async function POST(req: Request) {
         })
 
         const [rows] = await connection.query(
-            `SHOW TRIGGERS FROM ${databaseDetail.databaseName}`,
+            `SELECT TABLE_SCHEMA, TABLE_NAME, VIEW_DEFINITION
+            FROM information_schema.VIEWS
+            WHERE TABLE_SCHEMA = ${connection.escape(databaseDetail.databaseName)};`,
         )
-
         return NextResponse.json(rows)
     }
     catch (err) {

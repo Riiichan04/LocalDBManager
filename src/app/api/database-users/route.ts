@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         })
 
         const [rows] = await connection.query(
-            `SHOW TRIGGERS FROM ${databaseDetail.databaseName}`,
+            `SELECT DISTINCT User FROM mysql.user`
         )
 
         return NextResponse.json(rows)

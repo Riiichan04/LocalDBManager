@@ -121,7 +121,7 @@ export default function TableComponent(props: TableComponentProps) {
                     </div>
                 </div> :
                 <>
-                    <DisplayDatabaseBar currentConnection={props.currentConnection} loadTableData={loadTableData} />
+                    <DisplayDatabaseBar currentConnection={props.currentConnection} handleTableAction={loadTableData} />
                     <div className="col-span-10" style={{ overflow: 'auto' }}>
                         <table ref={tableRef} className="min-w-max border-collapse border border-gray-300 table-fixed w-full">
                             <thead>
