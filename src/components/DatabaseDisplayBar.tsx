@@ -63,9 +63,12 @@ export default function DisplayDatabaseBar(props: DisplayDatabaseBarProps) {
                     <div key={db}>
                         <div
                             className={`py-2 px-1 flex cursor-pointer select-none text-button ${activeLine === db ? 'active-table-bar' : ''}`}
-                            onClick={() => (props.handleDatabaseAction ?? loadTableFromDatabase)?.(db)}
+                            onClick={() => {
+                                setActiveLine(db);
+                                return (props.handleDatabaseAction ?? loadTableFromDatabase)?.(db);
+                            }}
                         >
-                            {expanded.has(db) ? <ExpandMoreRoundedIcon /> : <ChevronRightRoundedIcon />}
+                            {!props.isNotExpaned ? expanded.has(db) ? <ExpandMoreRoundedIcon /> : <ChevronRightRoundedIcon /> : <></>}
                             <StorageRoundedIcon />
                             <span className="ms-2 truncate" title={db}>{db}</span>
                         </div>

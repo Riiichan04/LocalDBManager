@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         })
 
         const [rows] = await connection.query(
-            `SHOW INDEX FROM ${connection.escape(databaseDetail.tableName)} FROM ${connection.escape(databaseDetail.databaseName)}`,
+            `SHOW INDEX FROM ${databaseDetail.tableName} FROM ${databaseDetail.databaseName}`,
         )
 
         return NextResponse.json(rows)
