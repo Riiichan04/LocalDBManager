@@ -13,7 +13,6 @@ export default function MenuBar({ currentMenuBarFeature, updateCurrentMenuBarFea
         <div className="col-span-2 border-e relative" style={{ height: '100vh' }}>
             <div className="flex flex-col justify-center items-center mb-5">
                 <h3>Local DB Manager</h3>
-                <p>Version: 1.0</p>
             </div>
 
             <div className={`${currentMenuBarFeature === MenuBarType.HOME ? "active-feature " : " "} p-1 px-2 text-button select-none cursor-pointer items-center justify-center flex-1`}
