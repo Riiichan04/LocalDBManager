@@ -3,7 +3,7 @@ import { DatabaseConnection, FieldDetail } from "@/types/Connection"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import '@/styles/table.css'
-import DisplayDatabaseBar from "./DatabaseDisplayBar"
+import DisplayDatabaseBar from "../DatabaseDisplayBar"
 
 type DatabaseViewComponentProps = {
     currentConnection: DatabaseConnection | null

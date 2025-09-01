@@ -15,7 +15,7 @@ export default function MenuBar({ currentMenuBarFeature, updateCurrentMenuBarFea
                 <h3>Local DB Manager</h3>
             </div>
 
-            <div className={`${currentMenuBarFeature === MenuBarType.HOME ? "active-feature " : " "} p-1 px-2 text-button select-none cursor-pointer items-center justify-center flex-1`}
+            <div className={`${currentMenuBarFeature === MenuBarType.HOME ? "active-feature " : "menu-feature"} p-1 px-2 select-none cursor-pointer items-center justify-center flex-1`}
                 onClick={() => updateCurrentMenuBarFeature(MenuBarType.HOME)}
             >
                 <HomeRoundedIcon sx={{ fontSize: '2rem' }} />
@@ -24,7 +24,7 @@ export default function MenuBar({ currentMenuBarFeature, updateCurrentMenuBarFea
                 </span>
             </div>
 
-            <div className={`${currentMenuBarFeature === MenuBarType.CONNECTION ? "active-feature " : " "} p-1 px-2 text-button select-none cursor-pointer items-center justify-center flex-1`}
+            <div className={`${currentMenuBarFeature === MenuBarType.CONNECTION ? "active-feature " : "menu-feature"} p-1 px-2 select-none cursor-pointer items-center justify-center flex-1`}
                 onClick={() => updateCurrentMenuBarFeature(MenuBarType.CONNECTION)}
             >
                 <PowerRoundedIcon sx={{ fontSize: '2rem' }} />
@@ -34,7 +34,7 @@ export default function MenuBar({ currentMenuBarFeature, updateCurrentMenuBarFea
             </div>
 
             <div className='absolute inset-x-0 bottom-0'>
-                <div className={`${currentMenuBarFeature === MenuBarType.SETTING ? "active-feature " : " "} p-1 px-2 text-button select-none cursor-pointer items-center justify-center flex-1`}
+                <div className={`${currentMenuBarFeature === MenuBarType.SETTING ? "active-feature " : "menu-feature"} p-1 px-2 select-none cursor-pointer items-center justify-center flex-1`}
                     onClick={() => updateCurrentMenuBarFeature(MenuBarType.SETTING)}
                 >
                     <SettingsRoundedIcon sx={{ fontSize: '2rem' }} />

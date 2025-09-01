@@ -5,7 +5,7 @@ import { DataTypeIcon } from "@/types/IconType"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import '@/styles/table.css'
-import DisplayDatabaseBar from "./DatabaseDisplayBar"
+import DisplayDatabaseBar from "../DatabaseDisplayBar"
 
 type TableComponentProps = {
     currentConnection: DatabaseConnection | null

@@ -1,15 +1,16 @@
-import { fetchDatabaseUsers } from "@/services/databaseService"
+// import { fetchDatabase, fetchTableDataType, fetchTableFromDatabase, fetchTableRows } from "@/services/databaseService"
+import { fetchDatabaseTrigger } from "@/services/databaseService"
 import { DatabaseConnection, FieldDetail } from "@/types/Connection"
 import { CircularProgress } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import '@/styles/table.css'
-import DisplayDatabaseBar from "./DatabaseDisplayBar"
+import DisplayDatabaseBar from "../DatabaseDisplayBar"
 
-type DatabaseUserComponentProps = {
+type DatabaseTriggerComponentProps = {
     currentConnection: DatabaseConnection | null
 }
 
-export default function DatabaseUserComponent(props: DatabaseUserComponentProps) {
+export default function DatabaseTriggerComponent(props: DatabaseTriggerComponentProps) {
     const [loading, setLoading] = useState(false)
     const [columns, setColumns] = useState<FieldDetail[]>([])
     const [rows, setRows] = useState<Record<string, unknown>[]>([]) //For row display
@@ -18,7 +19,7 @@ export default function DatabaseUserComponent(props: DatabaseUserComponentProps)
     const tableRef = useRef<HTMLTableElement>(null)
     const loadTableData = async (dbName: string): Promise<string> => {
         if (props.currentConnection) {
-            const data = await fetchDatabaseUsers({ connection: props.currentConnection, databaseName: dbName })
+            const data = await fetchDatabaseTrigger({ connection: props.currentConnection, databaseName: dbName })
             setRows(data)
             const listColumn: FieldDetail[] = []
             if (data.length > 0) {
@@ -123,7 +124,7 @@ export default function DatabaseUserComponent(props: DatabaseUserComponentProps)
                                     ))}
                                 </tbody>
                             </table>
-                            : <div className="flex justify-center">Database này chưa cấp quyền cho user nào</div>
+                            : <div className="flex justify-center">Database này chưa có Trigger nào</div>
                         }
                     </div>
                 </>
